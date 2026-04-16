@@ -1,0 +1,2 @@
+file_path,file_name,source_type,product_name,dataset_name,title,platform_id,start_time,end_time,event_count,group_count,flash_count
+raw/goes_glm/GLM-L2-LCFA_2025_244_18_OR_GLM-L2-LCFA_G19_s20252441801000_e20252441801200_c20252441801218.nc,GLM-L2-LCFA_2025_244_18_OR_GLM-L2-LCFA_G19_s20252441801000_e20252441801200_c20252441801218.nc,GLM,GLM-L2-LCFA,OR_GLM-L2-LCFA_G19_s20252441801000_e20252441801200_c20252441801218.nc,"GLM L2 Lightning Detections: Events, Groups, and Flashes",G19,2025-09-01 18:01:00+00:00,2025-09-01 18:01:20+00:00,7988,3988,387

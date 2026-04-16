@@ -1,0 +1,2 @@
+raw/**/*.nc filter=lfs diff=lfs merge=lfs -text
+raw/**/*.png filter=lfs diff=lfs merge=lfs -text

@@ -1,0 +1,6 @@
+table_name,row_count,column_count,columns
+cmi_index,529,16,"file_path, file_name, source_type, product_name, dataset_name, title, platform_id, scene_id, start_time, end_time, x_size, y_size, band_id, band_wavelength, scene_center_lat, scene_center_lon"
+acm_index,522,18,"file_path, file_name, source_type, product_name, dataset_name, title, platform_id, scene_id, start_time, end_time, x_size, y_size, has_acm, has_bcm, has_cloud_probabilities, has_dqf, scene_center_lat, scene_center_lon"
+glm_index,1,12,"file_path, file_name, source_type, product_name, dataset_name, title, platform_id, start_time, end_time, event_count, group_count, flash_count"
+ibtracs_storms,13561,7,"sid, name, season, file_path, observation_count, first_time, last_time"
+ibtracs_observations,723981,12,"file_path, sid, name, season, basin, time, lat, lon, wmo_wind, wmo_pres, usa_status, usa_wind"
