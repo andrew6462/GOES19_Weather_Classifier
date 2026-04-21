@@ -10,9 +10,9 @@ A binary cloud-vs-clear patch classifier built from real NOAA GOES-19 satellite 
 |---|---|---|---|---|---|
 | Logistic Regression (Baseline) | 0.8505 | 0.8867 | 0.8202 | 0.8522 | 116,142 |
 | Version D (Best Non-CNN) | 0.9157 | 0.9428 | 0.8979 | 0.9198 | 79,725 |
-| **Final CNN** | **0.9477** | **0.9434** | **0.9606** | **0.9519** | **79,725** |
+| **Final CNN** | **0.9435** | **0.9470** | **0.9482** | **0.9476** | **79,725** |
 
-The CNN improved over the best non-CNN baseline by +0.032 accuracy, +0.063 recall, and +0.032 F1 on the same held-out grouped-scene test set.
+The CNN improved over the best non-CNN baseline by +2.8 accuracy points, +5.0 recall points, and +2.8 F1 points on the same held-out grouped-scene test set.
 
 ---
 
@@ -275,7 +275,7 @@ Dense (1 unit, sigmoid)
 | Validation patches | 47,949 |
 | Test patches | 79,725 |
 | Batch size | 512 |
-| Epochs | 13 (early stopping) |
+| Epochs | 9 (early stopping) |
 | Decision threshold | 0.45 (selected from validation sweep) |
 
 **Why a custom CNN and not a pretrained backbone?**
