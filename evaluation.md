@@ -19,7 +19,7 @@ The main metrics were accuracy, cloud precision, cloud recall, and cloud F1. Bec
 | Experiment C | 89,405 | 0.50 | 0.9069 | 0.9378 | 0.8868 | 0.9116 |
 | Experiment D | 79,725 | 0.50 | 0.9157 | 0.9428 | 0.8979 | 0.9198 |
 | Earlier CNN run | 79,725 | 0.50 | 0.9421 | 0.9557 | 0.9360 | 0.9457 |
-| Latest CNN run | 79,725 | 0.45 | 0.9477 | 0.9434 | 0.9606 | 0.9519 |
+| Latest CNN run | 79,725 | 0.45 | 0.9435 | 0.9470 | 0.9482 | 0.9476 |
 
 ## False Positives And False Negatives
 
@@ -28,15 +28,15 @@ The strongest apples-to-apples comparison is Experiment D versus the latest CNN 
 | Model | False Positives | False Positive Rate | False Negatives | False Negative Rate |
 | --- | ---: | ---: | ---: | ---: |
 | Experiment D | 2,338 | 6.36% | 4,386 | 10.21% |
-| Latest CNN | 2,477 | 6.74% | 1,693 | 3.94% |
+| Latest CNN | 2,280 | 6.20% | 2,225 | 5.18% |
 
-Relative to Experiment D, the latest CNN produced 139 more false positives but 2,693 fewer false negatives. This is the central tradeoff in the final model: it is slightly more willing to call a patch cloudy, but it misses far fewer true cloudy patches. For this project, that trade was worthwhile because recall and F1 improved sharply while precision remained almost unchanged.
+Relative to Experiment D, the latest CNN produced 58 fewer false positives and 2,161 fewer false negatives. This is the central result for the final model: it catches far more true cloudy patches while also slightly reducing false alarms. For this project, that operating point was worthwhile because recall and F1 improved meaningfully while precision also increased slightly.
 
 ## What The Results Showed
 
 The experiment ladder established that the baseline improved when the labels were cleaned and when larger 96x96 patches were used. Experiment D was the best logistic-regression model, reaching 0.9157 accuracy and 0.9198 cloud F1. That result justified using the Experiment D data definition as the reference point for the later CNN.
 
-The earlier CNN already surpassed Experiment D by a large margin, which showed that raw spatial context mattered. The latest CNN run improved again, reaching 0.9477 accuracy and 0.9519 cloud F1 on the shared test split. Compared with Experiment D, the latest CNN improved cloud recall from 0.8979 to 0.9606 and improved F1 from 0.9198 to 0.9519. Compared with the earlier CNN, the latest run gave up some precision but improved recall, overall accuracy, and F1. The latest run also trained longer, stopping after 13 epochs instead of 5, and selected a threshold of 0.45 from validation F1 search rather than using a fixed 0.50 threshold.
+The earlier CNN already surpassed Experiment D by a large margin, which showed that raw spatial context mattered. The latest CNN run improved again, reaching 0.9435 accuracy and 0.9476 cloud F1 on the shared test split. Compared with Experiment D, the latest CNN improved cloud recall from 0.8979 to 0.9482 and improved F1 from 0.9198 to 0.9476. Compared with the earlier CNN, the latest run gave up some precision but improved recall, overall accuracy, and F1. The latest run also trained longer, stopping after 9 epochs instead of 5, and selected a threshold of 0.45 from validation F1 search rather than using a fixed 0.50 threshold.
 
 ## Did The Work Meet The Project Expectations?
 
