@@ -1,0 +1,33 @@
+{
+  "0": {
+    "precision": 0.816142220434972,
+    "recall": 0.883946718931475,
+    "f1-score": 0.8486923492411966,
+    "support": 55104.0
+  },
+  "1": {
+    "precision": 0.886733970952887,
+    "recall": 0.8202267439955437,
+    "f1-score": 0.8521847180377539,
+    "support": 61038.0
+  },
+  "accuracy": 0.8504589209760466,
+  "macro avg": {
+    "precision": 0.8514380956939295,
+    "recall": 0.8520867314635094,
+    "f1-score": 0.8504385336394753,
+    "support": 116142.0
+  },
+  "weighted avg": {
+    "precision": 0.8532414547181123,
+    "recall": 0.8504589209760466,
+    "f1-score": 0.8505277507893383,
+    "support": 116142.0
+  },
+  "split_strategy": "group_scene_split",
+  "decision_threshold": 0.5,
+  "class_weight": "none",
+  "regularization_c": 1.0,
+  "train_patches": 345512,
+  "test_patches": 116142
+}
