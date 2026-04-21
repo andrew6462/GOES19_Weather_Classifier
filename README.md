@@ -1,89 +1,155 @@
-[READ_ME.md](https://github.com/user-attachments/files/26801578/READ_ME.md)
-### Modules Used
+# Scene-Aware Cloud Classification from GOES Image Patches Using a Convolutional Neural Network
 
-- `numpy`
-- `pandas`
-- `matplotlib`
-- `xarray`
-- `netCDF4`
-- `h5netcdf`
-- `scikit-learn`
-- `tensorflow`
+## Overview
 
-### Data Downloaded
+This project builds a **cloud-vs-clear image classifier** from **GOES-19 Advanced Baseline Imager (ABI)** satellite data. The pipeline starts with paired **Cloud and Moisture Imagery (CMI)** and **Clear Sky Mask (ACM)** products, converts them into labeled image patches, compares multiple feature-based baselines, and then trains a compact **convolutional neural network (CNN)** on the raw image patches.
 
-- GOES-19 ABI-L2-CMIPC C13 CONUS files: `529`
-- GOES-19 ABI-L2-ACMC CONUS files: `522`
-- GOES-19 GLM-L2-LCFA files: `1`
-- IBTrACS storm data: `IBTrACS.ALL.v04r01.nc`
-- Matched CMI/ACM scenes produced from the indexed files: `521`
+The main goal was not just to train a model, but to build a **scene-aware and reproducible AI workflow**:
 
-### Working Dataset Variants
+- curate and index raw NOAA satellite files
+- match CMI scenes with aligned ACM supervision
+- extract and clean labeled image patches
+- prevent scene leakage with grouped train/test splitting
+- compare classical machine learning against a CNN under the same task definition
+- save metrics, confusion matrices, and summary outputs for reproducible evaluation
 
-- Grouped baseline dataset: `461,654` labeled patches
-- Final cleaned 96x96 CNN / Version D dataset: `316,466` labeled patches
-- Ambiguous patches dropped in the cleaned 96x96 setup: `114,162`
+The final result was a **CNN** that outperformed the strongest non-CNN baseline on the same held-out grouped-scene test set.
 
-## Baseline
+---
 
-The baseline system used eight summary statistics from each patch and trained a logistic-regression classifier with a grouped scene split.
+## Final Takeaway
 
-- Model: `logistic regression`
-- Input: `summary statistics from each CMI patch`
-- Split strategy: `group_scene_split`
-- Train patches: `345,512`
-- Test patches: `116,142`
-- Decision threshold: `0.50`
-- Accuracy: `0.8505`
-- Cloud precision: `0.8867`
-- Cloud recall: `0.8202`
-- Cloud F1: `0.8522`
+The strongest model in this project was a **small Keras CNN** trained on cleaned `96x96` GOES-19 CMI patches.
 
-## Version D
+### Final CNN result
+- **Accuracy:** `0.9477`
+- **Cloud precision:** `0.9434`
+- **Cloud recall:** `0.9606`
+- **Cloud F1:** `0.9519`
+- **Held-out grouped-scene test patches:** `79,725`
 
-Version D was the strongest feature-based system and became the direct baseline for the final CNN comparison. It kept grouped scene splitting, cleaned the labels, and increased the patch size to `96x96` with stride `64`.
+### Strongest non-CNN result (Version D)
+- **Accuracy:** `0.9157`
+- **Cloud precision:** `0.9428`
+- **Cloud recall:** `0.8979`
+- **Cloud F1:** `0.9198`
 
-- Model: `logistic regression`
-- Dataset rule: `clear <= 0.3`, `cloudy >= 0.7`, ambiguous middle dropped
-- Split strategy: `group_scene_split`
-- Train patches: `236,741`
-- Test patches: `79,725`
-- Decision threshold: `0.50`
-- Class weight: `balanced`
-- Accuracy: `0.9157`
-- Cloud precision: `0.9428`
-- Cloud recall: `0.8979`
-- Cloud F1: `0.9198`
+### Main conclusion
+The project showed that:
+1. **label quality mattered a lot**
+2. **larger patch context helped**
+3. **scene-aware splitting was necessary for fair evaluation**
+4. the **CNN was the best model produced in this study**
 
-## CNN
+---
 
-The final model replaced hand-crafted patch features with raw `96x96` CMI patches while keeping the same cleaned-label data definition as Version D. Training used a grouped validation split on the training scenes only, early stopping, checkpointing, and validation-based threshold selection.
+## Table of Contents
 
-- Model: `small keras cnn`
-- Patch size: `96`
-- Patch stride: `64`
-- Min valid fraction: `0.9`
-- Clear threshold: `0.3`
-- Cloudy threshold: `0.7`
-- Train patches: `188,792`
-- Validation patches: `47,949`
-- Test patches: `79,725`
-- Batch size: `512`
-- Epochs trained: `13`
-- Decision threshold selected from validation: `0.45`
-- Accuracy: `0.9477`
-- Cloud precision: `0.9434`
-- Cloud recall: `0.9606`
-- Cloud F1: `0.9519`
+- [Project Goal](#project-goal)
+- [Why This Project Matters](#why-this-project-matters)
+- [Workflow / AI Pipeline](#workflow--ai-pipeline)
+- [Data Sources](#data-sources)
+- [Data Curation and Cleaning](#data-curation-and-cleaning)
+- [Labeling Strategy](#labeling-strategy)
+- [Dataset Variants](#dataset-variants)
+- [Model Development](#model-development)
+- [Baseline Experiments (Ablation Study)](#baseline-experiments-ablation-study)
+- [Final CNN Model](#final-cnn-model)
+- [Results](#results)
+- [Why the CNN Improved Performance](#why-the-cnn-improved-performance)
+- [Tech Stack / Dev Tools](#tech-stack--dev-tools)
+- [Repository Structure](#repository-structure)
+- [How to Run the Pipeline](#how-to-run-the-pipeline)
+- [Current Deployment Status](#current-deployment-status)
+- [Limitations](#limitations)
+- [Future Work](#future-work)
 
-## Final Comparison
+---
 
-The most important comparison in the project is Version D versus the final CNN because both systems use the same cleaned-label `96x96` patch definition and the same held-out test scenes.
+## Project Goal
 
-| Model | Accuracy | Cloud Precision | Cloud Recall | Cloud F1 | Test Patches |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Baseline | 0.8505 | 0.8867 | 0.8202 | 0.8522 | 116,142 |
-| Version D | 0.9157 | 0.9428 | 0.8979 | 0.9198 | 79,725 |
-| Final CNN | 0.9477 | 0.9434 | 0.9606 | 0.9519 | 79,725 |
+The task in this repository is:
 
-Compared with Version D, the final CNN improved accuracy by `0.0320`, improved cloud recall by `0.0627`, and improved cloud F1 by `0.0321` on the shared test split. That made the CNN the strongest model produced in the project.
+> Given a small patch from a GOES-19 satellite image, classify it as **clear** or **cloudy**.
+
+This is a **binary image-classification** problem built from real NOAA remote-sensing data. The project uses the GOES-19 **CMI** product as the input image source and the GOES-19 **ACM** product as the supervisory signal for patch labels.
+
+The project was designed to answer a few specific questions:
+
+- Can a simple feature-based model classify cloud vs. clear patches reasonably well?
+- Does a cleaner labeling strategy improve performance?
+- Does using larger image patches help by giving the model more spatial context?
+- Does a CNN trained on raw patches outperform a classical model built on summary statistics?
+
+---
+
+## Why This Project Matters
+
+Cloud detection is an important preprocessing step in remote sensing. If a downstream workflow cannot reliably identify cloud-contaminated regions, then later measurements and decisions become less trustworthy.
+
+This project focuses on a practical version of that problem:
+- not full-scene segmentation
+- not weather forecasting
+- not atmospheric retrieval
+- instead, **patch-level cloud classification**
+
+That narrower scope makes it possible to build a reproducible machine-learning pipeline while still working with real satellite data and realistic labeling challenges.
+
+A major challenge in this kind of project is that:
+- nearby patches are highly correlated
+- ambiguous cloud boundaries create noisy labels
+- accuracy can be inflated if patches from the same scene leak into both train and test
+
+Because of that, this repository emphasizes:
+- **data curation**
+- **clean labeling**
+- **grouped scene splitting**
+- **fair model comparison**
+
+---
+
+## Workflow / AI Pipeline
+
+```mermaid
+flowchart TD
+    A[Public NOAA / NCEI GOES-19 data] --> B[Download raw files]
+    B --> B1[CMI files]
+    B --> B2[ACM files]
+    B --> B3[Optional context files: GLM and IBTrACS]
+
+    B1 --> C[Index metadata from raw files]
+    B2 --> C
+    B3 --> C
+
+    C --> D[Match CMI and ACM scenes]
+    D --> E[Scene-level QC filtering]
+    E --> F[Extract fixed-size patches]
+
+    F --> G[Check valid pixel fraction]
+    G --> H[Convert ACM to binary cloud mask]
+    H --> I[Compute cloud fraction per patch]
+
+    I --> J[Labeling rules]
+    J --> J1[Baseline labels: cloud fraction >= 0.50]
+    J --> J2[Clean labels: clear <= 0.30 and cloudy >= 0.70]
+    J2 --> K[Drop ambiguous middle-band patches]
+
+    J1 --> L[Feature engineering]
+    L --> L1[mean, std, min, max, quartiles, valid fraction]
+    L1 --> M[Logistic regression baseline]
+
+    K --> N[Raw 96x96 patch dataset]
+    N --> O[Grouped train / validation / test split]
+    O --> P[CNN training]
+    P --> Q[Validation threshold selection]
+    Q --> R[Held-out grouped-scene evaluation]
+
+    M --> R
+    R --> S[Saved artifacts]
+    S --> S1[metrics JSON and CSV]
+    S --> S2[confusion matrix]
+    S --> S3[model summary]
+    S --> S4[comparison tables]
+
+    S --> T[Inference-ready model artifact]
+    T --> U[Future deployment on new GOES scenes]
