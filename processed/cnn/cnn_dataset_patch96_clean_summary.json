@@ -1,0 +1,15 @@
+{
+  "patches": 316466,
+  "cloudy_patches": 169188,
+  "dropped_ambiguous_patches": 114162,
+  "skipped_empty_scenes": 0,
+  "patch_size": 96,
+  "patch_stride": 64,
+  "min_valid_fraction": 0.9,
+  "clear_threshold": 0.3,
+  "cloudy_threshold": 0.7,
+  "patch_dtype": "float16",
+  "invalid_pixel_fill": "patch_mean",
+  "dataset_path": "/Users/apearce/projects/weather_classifier_submission/processed/cnn/cnn_dataset_patch96_clean.npz",
+  "metadata_path": "/Users/apearce/projects/weather_classifier_submission/processed/cnn/cnn_dataset_patch96_clean_metadata.csv"
+}

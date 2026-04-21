@@ -48,6 +48,7 @@ The project showed that:
 - [Project Goal](#project-goal)
 - [Why This Project Matters](#why-this-project-matters)
 - [Workflow / AI Pipeline](#workflow--ai-pipeline)
+- [Submission Artifacts](#submission-artifacts)
 - [Data Sources](#data-sources)
 - [Data Curation and Cleaning](#data-curation-and-cleaning)
 - [Labeling Strategy](#labeling-strategy)
@@ -153,3 +154,20 @@ flowchart TD
 
     S --> T[Inference-ready model artifact]
     T --> U[Future deployment on new GOES scenes]
+```
+
+---
+
+## Submission Artifacts
+
+Large generated datasets and model artifacts are included with the submission through Git LFS. The full inventory is documented in `reports/SUBMISSION_FILES.md`.
+
+| Path | Size | Purpose | Storage |
+| --- | ---: | --- | --- |
+| `processed/cnn/cnn_dataset_patch96_clean.npz` | 1.8 GB | Clean `96x96` CNN patch arrays, `316,466` patches | Git LFS |
+| `processed/cnn/cnn_dataset_patch96_clean_metadata.csv` | 145 MB | Per-patch metadata for the clean CNN dataset | Git LFS |
+| `processed/patch_dataset.csv` | 284 MB | Baseline patch feature and label table | Git LFS |
+| `processed/patch_dataset_arrays.npz` | 16 MB | Baseline patch arrays | Git LFS |
+| `processed/cnn/cnn_best_model.keras` | 1.2 MB | Final Keras CNN model artifact | Git LFS |
+
+The `reports/` directory contains the small summary files, metrics, and visual outputs that describe these artifacts.

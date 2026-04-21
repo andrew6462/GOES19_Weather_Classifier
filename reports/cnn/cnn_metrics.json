@@ -1,0 +1,44 @@
+{
+  "0": {
+    "precision": 0.9393980661854828,
+    "recall": 0.9379929290182214,
+    "f1-score": 0.9386949717629448,
+    "support": 36770.0
+  },
+  "1": {
+    "precision": 0.9469890723087654,
+    "recall": 0.9482016063322082,
+    "f1-score": 0.9475949514337231,
+    "support": 42955.0
+  },
+  "accuracy": 0.9434932580746316,
+  "macro avg": {
+    "precision": 0.943193569247124,
+    "recall": 0.9430972676752147,
+    "f1-score": 0.9431449615983339,
+    "support": 79725.0
+  },
+  "weighted avg": {
+    "precision": 0.943488021256359,
+    "recall": 0.9434932580746316,
+    "f1-score": 0.9434901881537666,
+    "support": 79725.0
+  },
+  "split_strategy": "group_scene_split",
+  "decision_threshold": 0.45,
+  "validation_cloud_f1": 0.9438825776616065,
+  "train_patches": 188792,
+  "val_patches": 47949,
+  "test_patches": 79725,
+  "normalization_mean": 278.5123026384394,
+  "normalization_std": 22.132038930901647,
+  "batch_size": 512,
+  "epochs_trained": 9,
+  "class_weight_0": 1.0801817162343086,
+  "class_weight_1": 0.9308994802915102,
+  "patch_size": 96,
+  "patch_stride": 64,
+  "min_valid_fraction": 0.9,
+  "clear_threshold": 0.3,
+  "cloudy_threshold": 0.7
+}
